@@ -1,10 +1,9 @@
-from sqlalchemy import create_engine, MetaData, \
-    Column, Integer, Numeric, String, Date, Table, ForeignKey 
-
+from sqlalchemy import Column, Integer, Numeric, String, Date, Table, ForeignKey
+from sqlalchemy import create_engine, MetaData
 
 # Set up connections between sqlalchemy and postgres dbapi
 # Instantiate metadate object
-engine = create_engine("postgresql://postgres:postgres@localhost:5432/fakedata")
+engine = create_engine("postgresql+psycopg://postgres:postgres@localhost:5432/fakedata")
 metadata = MetaData()
 
 # DDL for customers, products, stores, and transactions 
@@ -46,9 +45,7 @@ transactions_table = Table(
 
 # Start transaction to commit DDL to postgres database
 with engine.begin() as conn:
+    print(conn)
     metadata.create_all(conn)
-    
     for table in metadata.tables.keys():
         print(f"{table} successfully created")
-
-
